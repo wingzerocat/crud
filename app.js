@@ -7,16 +7,22 @@ $(document).ready(function() {
 
   $('.store-btn').on('click', function(event) {
     event.preventDefault();
-    localStorage.setItem($('.input-field-title').val(), $('.input-field-body').val());
+    let titleValue = $('.input-field-title').val();
+    let contentValue = $('.input-field-body').val();
+    localStorage.setItem('titleValue', titleValue);
+    localStorage.setItem('contentValue', contentValue);    
   });
 
   $('.get-btn').on('click', function(event) {
     event.preventDefault();
-    localStorage.getItem($('.input-field-title').val());
+    let titleValue = localStorage.getItem('titleValue');
+    let contentValue = localStorage.getItem('contentValue');
+    $('.debug').html(`<p>${titleValue} ${contentValue}</p>`);
   });
 
   $('.delete-btn').on('click', function(event) {
     event.preventDefault();
-    localStorage.removeItem($('.input-field-title').val());
+    let titleValue = $('.input-field-title').val();
+    localStorage.removeItem(titleValue);
   });
 });
