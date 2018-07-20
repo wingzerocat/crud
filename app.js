@@ -7,16 +7,16 @@ $(document).ready(function() {
 
   $('.store-btn').on('click', function(event) {
     event.preventDefault();
-    localStorage.setItem('hrext', "three is the best");
+    localStorage.setItem($('.input-field-title').val(), $('.input-field-body').val());
   });
 
   $('.get-btn').on('click', function(event) {
     event.preventDefault();
-    console.log(localStorage.getItem('hrext'));
+    localStorage.getItem($('.input-field-title').val());
   });
 
   $('.delete-btn').on('click', function(event) {
     event.preventDefault();
-    console.log(localStorage.removeItem('hrext'));
+    localStorage.removeItem($('.input-field-title').val());
   });
 });
