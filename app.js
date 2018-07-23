@@ -20,9 +20,8 @@ $(document).ready(function() {
   // Shows all contacts
   const showAll = function() {
     $results.html('');
-    $('.add-contact').css('visibility', 'visible');
-    $('.store-btn').css('visibility', 'hidden');
-    $('.crud-form').css('visibility', 'hidden');
+    $('.add-contact').show();
+    $('.store-btn').hide();
     $('.crud-form').hide();
     for (let i = 0; i < localStorage.length; i++) {
       displayResults(localStorage.key(i));
@@ -127,10 +126,19 @@ $(document).ready(function() {
 //Click to bring up the new contacts form
   $('.add-contact').on('click', function() {
     $results.slideUp();
-    $('.add-contact').css('visibility', 'hidden').hide();
-    $('.store-btn').css('visibility', 'visible');
-    $('.crud-form').css('visibility', 'visible');
-    $('.crud-form').slideDown();
+    $('.add-contact').hide();
+    $('.store-btn').show();
+    $('.cancel-btn').show();
+    $('.crud-form').show().slideDown();
+  });
+
+// Cancel addition of contact. return to contact list
+  $('.cancel-btn').on('click', function() {
+    $results.slideDown();
+    $('.add-contact').show();
+    $('.store-btn').hide();
+    $('.cancel-btn').hide();
+    $('.crud-form').hide();
   });
 
 // Display clicked contact info
