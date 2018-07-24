@@ -6,7 +6,9 @@ $(document).ready(function() {
   const displayResults = function(key, details) {
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
-    let $match = $('<div><div class="temp"><div class="name"></div><div class="last-only"></div><div class="info"></div></div></div>');
+    let $match = $('<div><div class="temp"><div class="name"></div><div class="info"></div></div></div>');
+
+    // Check for first name. Adds some spaces if no first name is present
     if (name.firstName === '') {
       $match.find('.name').addClass('last-only');
       $match.find('.name').text(name.lastName);
@@ -19,14 +21,13 @@ $(document).ready(function() {
     } else {
       $match.find('.info').text(key).hide();
     }
-
     $match.appendTo($results);
   };
 
 // "home screen" buttons - empty and +
   const homeBtns = function() {
     $results.html('');
-    $('.add-contact').show();
+    $('.new-contact').show();
     $('.left-empty-btn').show();
     $('.cancel-btn').hide();
     $('.back-btn').hide();
@@ -41,88 +42,6 @@ $(document).ready(function() {
     $('h3').hide();
     $('.contact-pic').hide();
   };
-
-// Maybe try for another grouping of buttons
-
-// Shows all contacts
-  const showAll = function() {
-    homeBtns();
-    for (let i = 0; i < localStorage.length; i++) {
-      displayResults(localStorage.key(i), false);
-    }
-    $results.show().slideDown();
-  };
-
-
-  const validateName = function() {
-    if ($('.first-name').val().length === 0 && $('.last-name').val().length === 0) {
-      alert('Need first or last');
-
-      return false;
-    }
-  }
-
-// Clears form values
-  const clearForm = function() {
-    $('.first-name').val('');
-    $('.last-name').val('');
-    $('.phone-number').val('');
-    $('.email').val('');
-    $('.search-term').val('');
-  }
-
-// Stores new contacts
-  $('.store-btn').on('click', function(event) {
-    event.preventDefault();
-    let valid = validateName();
-
-    if (valid) {
-      let key = {};
-      key.firstName = $('.first-name').val();
-      key.lastName = $('.last-name').val();
-
-      let value = {};
-      value.phone = $('.phone-number').val();
-      value.email = $('.email').val();
-      value.company = $('.company').val();
-
-      localStorage.setItem(JSON.stringify(key), JSON.stringify(value));
-    }
-
-    clearForm();
-    showAll();
-  });
-
-//Click to bring up the new contacts form
-  $('.add-contact').on('click', function() {
-    $results.html('');
-    clearForm();
-    $('.add-contact').hide();
-    $('.left-empty-btn').hide();
-    $('.store-btn').show();
-    $('.done-btn').hide();
-    $('.back-btn-btn').hide();
-    $('.edit-btn').hide();
-    $('.cancel-btn').show();
-    $('.crud-form').show();
-    $('.search-bar').hide();
-    $('.right-empty-btn').hide();
-    $('h1').hide();
-    $('h3').show();
-  });
-
-// Cancel addition of contact. return to contact list
-  $('.cancel-btn').on('click', function() {
-    homeBtns();
-    clearForm();
-    showAll();
-  });
-
-  $('.back-btn').on('click', function() {
-    homeBtns();
-    clearForm();
-    showAll();
-  });
 
 // When a contact is clicked on. Maybe move into $document.on('click', '.temp') or displayResults()
   const selectedContact = function(key) {
@@ -142,40 +61,20 @@ $(document).ready(function() {
 
     $match.find('.full-name').text(name.firstName + ' ' + name.lastName);
     $match.find('.company').text(info.company);
-    $match.find('.catp').text('phone:');
+    $match.find('.catp').text('phone: \n');
     $match.find('.cphone').text(info.phone);
-    $match.find('.cate').text('email:');
+    $match.find('.cate').text('email: \n');
     $match.find('.cemail').text(info.email);
     $match.find('.key').text(key).hide();
     $match.appendTo($results);
   };
-
-// Clicking Done removes the old contact and stores the new contact
-  $('.done-btn').on('click', function() {
-    let name = $("form").find('.contact-key').val();
-    console.log(name);
-    localStorage.removeItem(name);
-
-    let key = {};
-    key.firstName = $('.first-name').val();
-    key.lastName = $('.last-name').val();
-
-    let value = {};
-    value.phone = $('.phone-number').val();
-    value.email = $('.email').val();
-    value.company = $('.company').val();
-
-    localStorage.setItem(JSON.stringify(key), JSON.stringify(value));
-
-    showAll();
-  });
 
   const editContact = function(key) {
     $results.html('');
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
 
-    $('.add-contact').hide();
+    $('.new-contact').hide();
     $('.left-empty-btn').hide();
     $('.back-btn').hide();
     $('.done-btn').show();
@@ -193,12 +92,113 @@ $(document).ready(function() {
     $('.crud-form').find('.contact-key').val(key);
   };
 
+// Shows all contacts
+  const showAll = function() {
+    homeBtns();
+    for (let i = 0; i < localStorage.length; i++) {
+      displayResults(localStorage.key(i), false);
+    }
+    $results.hide().slideDown();
+  };
+
+// Clears form values
+  const clearForm = function() {
+    $('.first-name').val('');
+    $('.last-name').val('');
+    $('.phone-number').val('');
+    $('.email').val('');
+    $('.search-term').val('');
+  };
+
+  const validateName = function() {
+    if ($('.first-name').val().length === 0 && $('.last-name').val().length === 0) {
+      alert('Please enter a first or last name');
+      return false;
+    }
+
+    return true;
+  };
+
+  const validatePhone = function() {
+    let phone = $('.phone-number').val();
+    phone = phone.toString().replace(/ /g, '').replace(/\(/g, '').replace(/\)/, '').replace(/-/g, '');
+
+    if (phone.length !== 10 && phone.length !== 0) {
+      alert('Invalid phone number');
+      return false;
+    }
+
+    return true;
+  };
+
+  const storeContact = function() {
+    let validName = validateName();
+    let validPhone = validatePhone();
+
+    if (validName && validPhone) {
+      let key = {};
+      key.firstName = $('.first-name').val();
+      key.lastName = $('.last-name').val();
+
+      let value = {};
+      value.phone = $('.phone-number').val();
+      value.email = $('.email').val();
+      value.company = $('.company').val();
+
+      localStorage.setItem(JSON.stringify(key), JSON.stringify(value));
+    }
+
+    clearForm();
+    showAll();
+  };
+
+// Stores new and updated contacts. Calls storeContact();
+  $('.store-btn').on('click', function(event) {
+    event.preventDefault();
+    storeContact();
+  });
+
+  $('.done-btn').on('click', function() {
+    let name = $("form").find('.contact-key').val();
+    localStorage.removeItem(name);
+    storeContact();
+  });
+
+//Click to bring up the new contacts form
+  $('.new-contact').on('click', function() {
+    $results.html('');
+    clearForm();
+    $('.new-contact').hide();
+    $('.left-empty-btn').hide();
+    $('.store-btn').show();
+    $('.done-btn').hide();
+    $('.back-btn-btn').hide();
+    $('.edit-btn').hide();
+    $('.cancel-btn').show();
+    $('.crud-form').show();
+    $('.search-bar').hide();
+    $('.right-empty-btn').hide();
+    $('h1').hide();
+    $('h3').show();
+  });
+
+// Return to home screen
+  $('.cancel-btn').on('click', function() {
+    clearForm();
+    showAll();
+  });
+
+  $('.back-btn').on('click', function() {
+    clearForm();
+    showAll();
+  });
+
 // When a contact is clicked, causes selectedContact() to run
   $(document).on('click', '.temp', function() {
     $results.html('');
     let key = $(this).closest('.temp').find('.info').text();
     selectedContact(key, true);
-    $('.add-contact').hide();
+    $('.new-contact').hide();
     $('.left-empty-btn').hide();
     $('.search-bar').hide();
     $('.back-btn').show();
@@ -215,7 +215,7 @@ $(document).ready(function() {
   });
 
   $('.search-bar').on('click', function() {
-    $('.add-contact').hide();
+    $('.new-contact').hide();
     $('.cancel-btn').show();
     $('.left-empty-btn').hide();
     $('.right-empty-btn').show();
