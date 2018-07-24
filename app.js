@@ -6,8 +6,13 @@ $(document).ready(function() {
   const displayResults = function(key, details) {
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
-    let $match = $('<div><div class="temp"><div class="name"></div><div class="info"></div></div></div>');
-    $match.find('.name').text(name.firstName + ' ' + name.lastName);
+    let $match = $('<div><div class="temp"><div class="name"></div><div class="last-only"></div><div class="info"></div></div></div>');
+    if (name.firstName === '') {
+      $match.find('.name').addClass('last-only');
+      $match.find('.name').text(name.lastName);      
+    } else {
+      $match.find('.name').text(name.firstName + ' ' + name.lastName);
+    }
 
     if (details) {
       $match.find('.info').text(key);
@@ -111,11 +116,23 @@ $(document).ready(function() {
   const selectedContact = function(key) {
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
-    let $match = $('<div><div class="selected"><div class="full-name"></div><div class="phone"></div><div class="email"></div><div class="key"></div></div></div>');
-    $('.contact-pic').text(name.firstName[0] + name.lastName[0]);
+    let $match = $('<div><div class="selected"><div class="full-name"></div>' +
+      '<div class="spacer"></div><div class="catp"></div><div class="cphone">' +
+      '</div><div class="cate"></div><div class="cemail"></div><div class="key"></div></div></div>');
+
+    if (name.firstName[0] === undefined) {
+      $('.contact-pic').text(name.lastName[0]);
+    } else if (name.lastName[0] === undefined) {
+      $('.contact-pic').text(name.firstName[0]);
+    } else {
+      $('.contact-pic').text(name.firstName[0] + name.lastName[0]);
+    }
+
     $match.find('.full-name').text(name.firstName + ' ' + name.lastName);
-    $match.find('.phone').text('phone: ' + info.phone);
-    $match.find('.email').text('email: ' + info.email);
+    $match.find('.catp').text('phone:');
+    $match.find('.cphone').text(info.phone);
+    $match.find('.cate').text('email:');
+    $match.find('.cemail').text(info.email);
     $match.find('.key').text(key).hide();
     $match.appendTo($results);
   };
@@ -175,7 +192,6 @@ $(document).ready(function() {
     $('.right-empty-btn').hide();
     $('h1').hide();
     $('.contact-pic').show();
-
   });
 
   $(document).on('click', '.edit-btn', function() {
@@ -206,71 +222,9 @@ $(document).ready(function() {
     }
   });
 
-
-
-
-
 //Initial population of $results
   showAll();
 });
-
-//RETRIEVE
-  // $('.get-btn').on('click', function(event) {
-  //   event.preventDefault();
-  //   $results.html('');
-  //
-  //   let keySearch = {};
-  //   let valueSearch = {};
-  //   let kFlag = false;
-  //   let sFlag = false;
-  //   let hits = 0;
-  //   //flags are to gate which if else statement it will go into
-  //
-  //   if ($('.first-name').val()) {
-  //     keySearch.firstName = $('.first-name').val();
-  //   }
-  //   if ($('.last-name').val()) {
-  //     keySearch.lastName = $('.last-name').val();
-  //   }
-  //   if ($('.age').val()) {
-  //     valueSearch.age = $('.age').val();
-  //   }
-  //
-  //   let kTerm = JSON.stringify(keySearch);
-  //   let sTerm = JSON.stringify(valueSearch);
-  //
-  //   if (kTerm.length > 2) {
-  //     kFlag = true;
-  //   }
-  //   if (sTerm.length > 2) {
-  //     sFlag = true;
-  //   }
-  //
-  //   for (let i = 0; i < localStorage.length; i++) {
-  //     if (kFlag && sFlag) {
-  //       if (localStorage.key(i).includes(kTerm.slice(1, kTerm.length - 1)) && localStorage.getItem(localStorage.key(i)).includes(sTerm.slice(1, sTerm.length - 1))) {
-  //         displayResults(localStorage.key(i), hits);
-  //         hits += 1;
-  //       }
-  //     } else if (kFlag) {
-  //       if (localStorage.key(i).includes(kTerm.slice(1, kTerm.length - 1))) {
-  //         displayResults(localStorage.key(i), hits);
-  //         hits += 1;
-  //       }
-  //     } else if (sFLag) {
-  //       if (localStorage.getItem(localStorage.key(i)).includes(sTerm.slice(1, sTerm.length - 1))) {
-  //         displayResults(localStorage.key(i), hits);
-  //         hits += 1;
-  //       }
-  //     }
-  //   }
-  //
-  //   let $hits = $('<div><div class="body"></div></div>');
-  //   $hits.find('.body').text(hits);
-  //   $hits.prependTo($results);
-  //
-  //   clearForm();
-  // });
 
 //DELETE
   // $('.delete-btn').on('click', function(event) {
