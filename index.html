@@ -12,15 +12,14 @@
   </head>
 
   <body>
-    <div class="wrapper">
       <div class="header">
         <button class="left-empty-btn"></button>
-        <button class="add-contact">+</button>
+        <button class="new-contact">+</button>
         <button class="cancel-btn">cancel</button>
         <button class="store-btn">Add Contact</button>
-        <button class="back"> < Contacts</button>
+        <button class="back-btn"> < Contacts</button>
         <button class="edit-btn">Edit</button>
-        <button class="done">Done</button>
+        <button class="done-btn">Done</button>
         <button class="right-empty-btn"></button>
       </div>
 
@@ -34,27 +33,30 @@
         <input class="search-term" placeholder="Search" type="text">
       </div>
 
-      <!-- Look into what is important and what classes i can remove -->
-      <div class="form">
-        <form class="crud-form">
-          <div class="name-field">
-            <input class="first-name" placeholder="First name" type="text"><br>
-          </div>
-          <div class="name-field">
-            <input class="last-name" placeholder="Last name" type="text"><br>
-          </div>
-          <div class="spacer"></div>
-          <div class="input-field">
-            phone: <input class="phone-number" type="text"><br>
-          </div>
-          <div class="input-field">
-            email: <input class="email" type="text"><br>
-          </div>
-          <input class="contact-key" type="text">
-        </form>
-      </div>
+      <!-- <div class="form"> -->
+      <form class="crud-form">
+        <div class="name-field">
+          <input class="first-name" placeholder="First name" type="text"><br>
+        </div>
+        <div class="name-field">
+          <input class="last-name" placeholder="Last name" type="text"><br>
+        </div>
+        <div class="name-field">
+          <input class="company" placeholder="Company" type="text"><br>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="input-field">
+          phone: <input class="phone-number" placeholder="phone number" type="text"><br>
+        </div>
+        <div class="input-field">
+          email: <input class="email" placeholder="email" type="text"><br>
+        </div>
+        <input class="contact-key" type="text">
+      </form>
+      <!-- </div> -->
 
       <div class="results"></div>
-    </div>
   </body>
 </html>
