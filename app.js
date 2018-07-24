@@ -3,31 +3,31 @@ $(document).ready(function() {
 
 // Displays the search results. Can consider getting rid of the details param if other function is
 // not refractored
-  const displayResults = function(key, details) {
+  const displayResults = function(key, index, part) {
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
-    let $match = $('<div><div class="temp"><div class="name"></div><div class="info"></div></div></div>');
+    let $match = $('<div><div class="temp"></div></div>');
+    // let $match = $('<div><div class="temp"><div class="name"></div><div class="info"></div></div></div>');
+    $match.appendTo($results);
 
     // Check for first name. Adds some spaces if no first name is present
-    if (name.firstName === '') {
-      $match.find('.name').addClass('last-only');
-      $match.find('.name').text(name.lastName);
-    } else {
-      $match.find('.name').text(name.firstName + ' ' + name.lastName);
+    if (name.firstName === '' && part !== 'last') {
+      $('.temp:last').append("<div class='name last-only'>" + name.lastName + "</div>");
+    } else if (part === undefined) {
+      $('.temp:last').append("<div class='name'>" + name.firstName + ' ' + name.lastName + "</div>");
+    } else if (part === 'first') {
+      $('.temp:last').append("<div class='name'><span class='bold'>" + name.firstName.slice(0, index) + "</span>" + name.firstName.slice(index, name.firstName.length) + ' ' + name.lastName + "</div>");
+    } else if (part === 'last') {
+      $('.temp:last').append("<div class='name'>" + name.firstName + "<span class='bold'> " + name.lastName.slice(0, index) + "</span>" + name.lastName.slice(index, name.lastName.length) + "</div>");
     }
 
-    if (details) {
-      $match.find('.info').text(key);
-    } else {
-      $match.find('.info').text(key).hide();
-    }
-    $match.appendTo($results);
+    $('.temp:last').append("<div class='info'>" + key +"</div>");
+    $('.info').hide();
   };
 
-// "home screen" buttons - empty and +
+// Hiding buttons
   const homeBtns = function() {
     $results.html('');
-    $('.right-empty-btn').hide();
     $('.cancel-btn').hide();
     $('.back-btn').hide();
     $('.done-btn').hide();
@@ -41,6 +41,12 @@ $(document).ready(function() {
     $('h1').show();
     $('h3').hide();
     $('.contact-pic').hide();
+  };
+
+  const otherBtns = function() {
+    $('.new-contact').hide();
+    $('.left-empty-btn').hide();
+    $('.search-bar').hide();
   };
 
 // When a contact is clicked on. Maybe move into $document.on('click', '.temp') or displayResults()
@@ -83,13 +89,10 @@ $(document).ready(function() {
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
 
-    $('.new-contact').hide();
-    $('.left-empty-btn').hide();
+    otherBtns();
     $('.back-btn').hide();
     $('.edit-btn').hide();
     $('.store-btn').hide();
-    $('.search-bar').hide();
-    $('.right-empty-btn').hide();
     $('.done-btn').show();
     $('.cancel-btn').show();
 
@@ -105,10 +108,11 @@ $(document).ready(function() {
 // Shows all contacts
   const showAll = function() {
     homeBtns();
+    clearForm();
     for (let i = 0; i < localStorage.length; i++) {
-      displayResults(localStorage.key(i), false);
+      displayResults(localStorage.key(i), 0);
     }
-    $results.hide().slideDown();
+    $results.show();
   };
 
 // Clears form values
@@ -117,6 +121,7 @@ $(document).ready(function() {
     $('.last-name').val('');
     $('.phone-number').val('');
     $('.email').val('');
+    $('.company').val('');
     $('.search-term').val('');
   };
 
@@ -170,22 +175,23 @@ $(document).ready(function() {
   });
 
   $('.done-btn').on('click', function() {
-    let name = $("form").find('.contact-key').val();
-    localStorage.removeItem(name);
-    storeContact();
+    let validName = validateName();
+    let validPhone = validatePhone();
+
+    if (validName && validPhone) {
+      let name = $("form").find('.contact-key').val();
+      localStorage.removeItem(name);
+      storeContact();
+    }
+
+    showAll();
   });
 
 //Click to bring up the new contacts form
   $('.new-contact').on('click', function() {
     $results.html('');
     clearForm();
-    $('.new-contact').hide();
-    $('.left-empty-btn').hide();
-    $('.done-btn').hide();
-    $('.back-btn-btn').hide();
-    $('.edit-btn').hide();
-    $('.search-bar').hide();
-    $('.right-empty-btn').hide();
+    otherBtns();
     $('.store-btn').show();
     $('.cancel-btn').show();
     $('.crud-form').show();
@@ -195,12 +201,10 @@ $(document).ready(function() {
 
 // Return to home screen
   $('.cancel-btn').on('click', function() {
-    clearForm();
     showAll();
   });
 
   $('.back-btn').on('click', function() {
-    clearForm();
     showAll();
   });
 
@@ -209,11 +213,9 @@ $(document).ready(function() {
     $results.html('');
     let key = $(this).closest('.temp').find('.info').text();
     selectedContact(key, true);
-    $('.new-contact').hide();
-    $('.left-empty-btn').hide();
-    $('.search-bar').hide();
+    otherBtns();
+
     $('.cancel-btn').hide();
-    $('.right-empty-btn').hide();
     $('.back-btn').show();
     $('.edit-btn').show();
     $('h1').hide();
@@ -226,10 +228,8 @@ $(document).ready(function() {
   });
 
   $('.search-bar').on('click', function() {
-    $('.new-contact').hide();
     $('.cancel-btn').show();
     $('.left-empty-btn').hide();
-    $('.right-empty-btn').show();
   });
 
 // Searches localStorage for any matches. Consider bolding any matching strings
@@ -242,8 +242,10 @@ $(document).ready(function() {
       let first = contactName.firstName.toLowerCase();
       let last = contactName.lastName.toLowerCase();
 
-      if (first.startsWith(searchTerm) || last.startsWith(searchTerm)) {
-        displayResults(localStorage.key(i));
+      if (first.startsWith(searchTerm)) {
+        displayResults(localStorage.key(i), searchTerm.length, 'first');
+      } else if (last.startsWith(searchTerm)) {
+        displayResults(localStorage.key(i), searchTerm.length, 'last');
       }
     }
   });
