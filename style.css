@@ -22,11 +22,6 @@ body {
   justify-content: space-between;
 }
 
-.results {
-  justify-content: center;
-  width: inherit;
-}
-
 button {
   border: 0px;
   font-size: 15px;
@@ -40,8 +35,12 @@ button:focus {
   outline: none;
 }
 
-.add-contact {
+.new-contact {
   font-size: 25px;
+}
+
+.delete-btn {
+  color: red;
 }
 
 .search-bar {
@@ -59,7 +58,7 @@ button:focus {
   left: 5px;
 }
 
-.temp {
+.contact {
   border-bottom: 1px grey solid;
   min-height: 50px;
   width: inherit;
@@ -67,7 +66,7 @@ button:focus {
   align-items: center;
 }
 
-.temp:hover {
+.contact:hover {
   background: linear-gradient(to top left, white, white 40%, lightgrey);
 }
 
@@ -87,11 +86,6 @@ button:focus {
   align-items: center;
 }
 
-/* .form {
-  display:flex;
-  justify-content: center;
-} */
-
 .crud-form {
   display: flex;
   flex-direction: column;
@@ -104,7 +98,7 @@ button:focus {
   justify-content: center;
 }
 
-.body-title {
+.body-header {
   width: inherit;
   display: flex;
   justify-content: center;
@@ -139,12 +133,24 @@ h3 {
 input {
   border: 0px;
   font-size: 15px;
-  width: 400px;
+  width: 100%;
+  height: 25px;
   background: transparent;
 }
 
 input:focus {
   outline: none;
+}
+
+input::placeholder {
+  color: lightgrey;
+}
+
+.input-field {
+  width: 400px;
+  margin-top: 5px;
+  color: blue;
+  border-bottom: 1px grey solid;
 }
 
 .name-field {
@@ -154,13 +160,6 @@ input:focus {
 
 .spacer {
   height: 15px;
-}
-
-.input-field {
-  width: 400px;
-  margin-top: 5px;
-  color: blue;
-  border-bottom: 1px grey solid;
 }
 
 .catp, .cate, .cphone, .cemail {
@@ -187,6 +186,7 @@ input:focus {
   font-weight: bold;
 }
 
-input::placeholder {
-  color: lightgrey;
+.results {
+  justify-content: center;
+  width: inherit;
 }
