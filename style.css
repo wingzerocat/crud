@@ -13,7 +13,7 @@ body {
   width: 500px;
   background-color: transparent;
   /* background: linear-gradient(to bottom right, lightblue, lightgreen) fixed; */
-  background: linear-gradient(to bottom right, white, grey) fixed;
+  background: linear-gradient(to bottom right, white, white 40%, grey) fixed;
 }
 
 .wrapper {
@@ -44,8 +44,27 @@ button {
   background-color: transparent;
 }
 
+button:focus {
+  outline: none;
+}
+
 .add-contact {
   font-size: 25px;
+}
+
+.search-bar {
+  width: inherit;
+  height: 30px;
+  border: 1px lightgrey solid;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.search-term {
+  width: inherit;
+  position: relative;
+  left: 5px;
 }
 
 .temp {
@@ -57,11 +76,16 @@ button {
 }
 
 .temp:hover {
-  background: linear-gradient(to top left, white, lightgrey);
+  background: linear-gradient(to top left, white, white 40%, lightgrey);
 }
 
 .contact-key {
   visibility: hidden;
+}
+
+.name {
+  position: relative;
+  left: 5px;
 }
 
 .selected {
@@ -137,10 +161,11 @@ input:focus {
 }
 
 .spacer {
-  height: 25px;
+  height: 15px;
 }
 
 .input-field {
   width: 300px;
+  margin-top: 5px;
   border-bottom: 1px grey solid;
 }
