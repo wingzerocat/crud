@@ -5,20 +5,20 @@ $(document).ready(function() {
   const displayResults = function(key, index, part) {
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
-    let $match = $('<div><div class="temp"></div></div>');
+    let $match = $('<div><div class="contact"></div></div>');
     $match.appendTo($results);
 
     if (name.firstName === '' && part !== 'last') {
-      $('.temp:last').append("<div class='name last-only'>" + name.lastName + "</div>");
+      $('.contact:last').append("<div class='name last-only'>" + name.lastName + "</div>");
     } else if (part === undefined) {
-      $('.temp:last').append("<div class='name'>" + name.firstName + ' ' + name.lastName + "</div>");
+      $('.contact:last').append("<div class='name'>" + name.firstName + ' ' + name.lastName + "</div>");
     } else if (part === 'first') {
-      $('.temp:last').append("<div class='name'><span class='bold'>" + name.firstName.slice(0, index) + "</span>" + name.firstName.slice(index, name.firstName.length) + ' ' + name.lastName + "</div>");
+      $('.contact:last').append("<div class='name'><span class='bold'>" + name.firstName.slice(0, index) + "</span>" + name.firstName.slice(index, name.firstName.length) + ' ' + name.lastName + "</div>");
     } else if (part === 'last') {
-      $('.temp:last').append("<div class='name'>" + name.firstName + "<span class='bold'> " + name.lastName.slice(0, index) + "</span>" + name.lastName.slice(index, name.lastName.length) + "</div>");
+      $('.contact:last').append("<div class='name'>" + name.firstName + "<span class='bold'> " + name.lastName.slice(0, index) + "</span>" + name.lastName.slice(index, name.lastName.length) + "</div>");
     }
 
-    $('.temp:last').append("<div class='info'>" + key +"</div>");
+    $('.contact:last').append("<div class='info'>" + key +"</div>");
     $('.info').hide();
   };
 
@@ -47,17 +47,20 @@ $(document).ready(function() {
     $('.search-bar').hide();
   };
 
-// When a contact is clicked on. Maybe move into $document.on('click', '.temp') or displayResults()
+  const formatPhone = function(number) {
+    let phone = number.replace(/ /g, '').replace(/\(/g, '').replace(/\)/, '').replace(/-/g, '');
+    let formattedPhone = '(' + phone.slice(0,3) + ') ' + phone.slice(3, 6) + '-' + phone.slice(6, 10);
+
+    return formattedPhone;
+  };
+
+// When a contact is clicked on. Maybe move into $document.on('click', '.contact') or displayResults()
   const selectedContact = function(key) {
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
 
     if (info.phone.length !== 0) {
-      let phone = (info.phone).replace(/ /g, '').replace(/\(/g, '').replace(/\)/, '').replace(/-/g, '');
-
-      let formattedPhone = '(';
-      formattedPhone += phone.slice(0,3) + ') ' + phone.slice(3, 6) + '-' + phone.slice(6, 10);
-      info.phone = formattedPhone;
+      info.phone = formatPhone(info.phone);
     }
 
     let $match = $('<div><div class="selected"><div class="full-name"></div><div class="company"></div>' +
@@ -80,28 +83,6 @@ $(document).ready(function() {
     $match.find('.cemail').text(info.email);
     $match.find('.key').text(key).hide();
     $match.appendTo($results);
-  };
-
-  const editContact = function(key) {
-    $results.html('');
-    let name = JSON.parse(key);
-    let info = JSON.parse(localStorage.getItem(key));
-
-    otherBtns();
-    $('.back-btn').hide();
-    $('.edit-btn').hide();
-    $('.store-btn').hide();
-    $('.done-btn').show();
-    $('.cancel-btn').show();
-    $('.delete-btn').show();
-
-    $('.crud-form').show();
-    $('.crud-form').find('.first-name').val(name.firstName);
-    $('.crud-form').find('.last-name').val(name.lastName);
-    $('.crud-form').find('.company').val(info.company);
-    $('.crud-form').find('.phone-number').val(info.phone);
-    $('.crud-form').find('.email').val(info.email);
-    $('.crud-form').find('.contact-key').val(key);
   };
 
 // Shows all contacts
@@ -128,7 +109,7 @@ $(document).ready(function() {
   const validateNameNumber = function() {
     if ($('.first-name').val().length === 0 && $('.last-name').val().length === 0) {
       alert('Please enter a first or last name');
-      return false;
+      return 'name';
     }
 
     let phone = $('.phone-number').val();
@@ -136,7 +117,7 @@ $(document).ready(function() {
 
     if (phone.length !== 10 && phone.length !== 0) {
       alert('Invalid phone number');
-      return false;
+      return 'phone';
     }
 
     return true;
@@ -145,8 +126,13 @@ $(document).ready(function() {
   const storeContact = function() {
     let valid = validateNameNumber();
 
-    if (valid) {
+    if (valid === true) {
+      $('.first-name').css('outline', 'none');
+      $('.last-name').css('outline', 'none');
+      $('.phone-number').css('outline', 'none');
+
       let key = {};
+      key.sorting = $('.first-name').val().toUpperCase();
       key.firstName = $('.first-name').val();
       key.lastName = $('.last-name').val();
 
@@ -156,22 +142,29 @@ $(document).ready(function() {
       value.company = $('.company').val();
 
       localStorage.setItem(JSON.stringify(key), JSON.stringify(value));
+      clearForm();
+      showAll();
+    } else if (valid === 'name') {
+      $('.first-name').css('outline', '1px blue solid');
+      $('.last-name').css('outline', '1px blue solid');
+    } else if (valid === 'phone') {
+      $('.phone-number').css('outline', '1px blue solid');
     }
-
-    clearForm();
-    showAll();
   };
 
   $('.done-btn').on('click', function() {
     let valid = validateNameNumber();
 
-    if (valid) {
+    if (valid === true) {
       let name = $("form").find('.contact-key').val();
       localStorage.removeItem(name);
       storeContact();
+    } else if (valid === 'name') {
+      $('.first-name').css('outline', '1px blue solid');
+      $('.last-name').css('outline', '1px blue solid');
+    } else if (valid === 'phone') {
+      $('.phone-number').css('outline', '1px blue solid');
     }
-
-    showAll();
   });
 
 //Click to bring up the new contacts form
@@ -202,9 +195,9 @@ $(document).ready(function() {
   });
 
 // When a contact is clicked, causes selectedContact() to run
-  $(document).on('click', '.temp', function() {
+  $(document).on('click', '.contact', function() {
     $results.html('');
-    let key = $(this).closest('.temp').find('.info').text();
+    let key = $(this).closest('.contact').find('.info').text();
     selectedContact(key, true);
     otherBtns();
 
@@ -217,7 +210,30 @@ $(document).ready(function() {
 
   $('.edit-btn').on('click', function() {
     let key = $("div:last").closest('.selected').find('.key').text();
-    editContact(key);
+
+    $results.html('');
+    let name = JSON.parse(key);
+    let info = JSON.parse(localStorage.getItem(key));
+
+    if (info.phone.length !== 0) {
+      info.phone = formatPhone(info.phone);
+    }
+
+    otherBtns();
+    $('.back-btn').hide();
+    $('.edit-btn').hide();
+    $('.store-btn').hide();
+    $('.done-btn').show();
+    $('.cancel-btn').show();
+    $('.delete-btn').show();
+
+    $('.crud-form').show();
+    $('.crud-form').find('.first-name').val(name.firstName);
+    $('.crud-form').find('.last-name').val(name.lastName);
+    $('.crud-form').find('.company').val(info.company);
+    $('.crud-form').find('.phone-number').val(info.phone);
+    $('.crud-form').find('.email').val(info.email);
+    $('.crud-form').find('.contact-key').val(key);
   });
 
   $('.search-bar').on('click', function() {
@@ -256,16 +272,3 @@ $(document).ready(function() {
 
   showAll();
 });
-
-//DELETE
-  // $('.delete-btn').on('click', function(event) {
-  //   event.preventDefault();
-  //   let key = {};
-  //   key.firstName = $('.first-name').val();
-  //   key.lastName = $('.last-name').val();
-  //
-  //
-  //   localStorage.removeItem(JSON.stringify(key));
-  //
-  //   clearForm();
-  // });
