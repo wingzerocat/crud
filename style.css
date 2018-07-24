@@ -167,5 +167,23 @@ input:focus {
 .input-field {
   width: 300px;
   margin-top: 5px;
+  color: blue;
   border-bottom: 1px grey solid;
+}
+
+.catp, .cate, .cphone, .cemail {
+  width: 400px;
+  justify-content: flex-start;
+}
+
+.catp, .cate {
+  color: blue;
+}
+
+.cphone, .cemail {
+  border-bottom: 1px grey solid;
+}
+
+.name.last-only {
+  left: 20px;
 }
