@@ -1,41 +1,63 @@
-body {
+html, body {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-  width: 700px;
+  height: 100%;
+}
+
+html {
+  display: table;
+  margin: auto;
+}
+
+body {
+  display: table-cell;
+  width: 500px;
+  background-color: transparent;
+  /* background: linear-gradient(to bottom right, lightblue, lightgreen) fixed; */
+  background: linear-gradient(to bottom right, white, grey) fixed;
+}
+
+.wrapper {
+  display: flex;
+  margin-top: 10px;
+  width: inherit;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .header {
   display: flex;
-  width: 700px;
+  width: inherit;
   justify-content: space-between;
 }
 
 .results {
-  width: 700px;
+  justify-content: center;
+  width: inherit;
 }
 
 button {
   border: 0px;
   font-size: 15px;
+  color: blue;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
 }
 
 .add-contact {
-  color: blue;
   font-size: 25px;
-}
-
-h1 {
-  margin: 0px;
 }
 
 .temp {
   border-bottom: 1px grey solid;
   min-height: 50px;
+  width: inherit;
   display: flex;
   align-items: center;
 }
 
 .temp:hover {
-  background-color: #e6eaf2;
+  background: linear-gradient(to top left, white, lightgrey);
 }
 
 .contact-key {
@@ -45,6 +67,7 @@ h1 {
 .selected {
   min-height: 50px;
   display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -52,6 +75,72 @@ h1 {
   display:flex;
   justify-content: center;
 }
+
 .crud-form {
   display: flex;
   flex-direction: column;
+  align-items: center;
+}
+
+.body-title {
+  width: inherit;
+  display: flex;
+  justify-content: center;
+}
+
+.body-title {
+  width: inherit;
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  width: inherit;
+  margin: 0px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+h3 {
+  height: 35px;
+  margin: 0px;
+}
+
+.contact-pic {
+  height: 100px;
+  width: 100px;
+  background-color: grey;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  color: white;
+  margin: 10px;
+}
+
+/* Styling input fields */
+input {
+  border: 0px;
+  font-size: 15px;
+  width: 300px;
+  background: transparent;
+}
+
+input:focus {
+  outline: none;
+}
+
+.name-field {
+  width: 200px;
+  border-bottom: 1px grey solid;
+}
+
+.spacer {
+  height: 25px;
+}
+
+.input-field {
+  width: 300px;
+  border-bottom: 1px grey solid;
+}
