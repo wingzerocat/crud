@@ -1,40 +1,48 @@
 $(document).ready(function() {
-  // console.log('+++ filename: app.js functionName: jquery.ready expected: no error actual: ', $);
-
-  // $().on('click', function() {
-  //
-  // });
-//localStorage.length - shows how many objects in localStorage
   let $results = $('.results');
 
-  // Displays the search results
-  const displayResults = function(key) {
+// Displays the search results
+  const displayResults = function(key, details) {
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
     let $match = $('<div><div class="temp"><div class="name"></div><div class="info"></div></div></div>');
     $match.find('.name').text(name.firstName + ' ' + name.lastName);
-    $match.find('.info').text(key);
-    $match.appendTo($results);
-  }
 
-  // Shows all contacts
+    if (details) {
+      $match.find('.info').text(key);
+    } else {
+      $match.find('.info').text(key).hide();
+    }
+
+    $match.appendTo($results);
+  };
+
+// Shows all contacts
   const showAll = function() {
     $results.html('');
     $('.add-contact').show();
+    $('.cancel-btn').hide();
+    $('.back').hide();
+    $('.done').hide();
+    $('.edit').hide();
     $('.store-btn').hide();
     $('.crud-form').hide();
     for (let i = 0; i < localStorage.length; i++) {
-      displayResults(localStorage.key(i));
+      displayResults(localStorage.key(i), false);
     }
     $results.show().slideDown();
-  }
+  };
 
+
+// Clears form values
   const clearForm = function() {
     $('.first-name').val('');
     $('.last-name').val('');
+    $('.phone-number').val('');
+    $('.email').val('');
   }
 
-//STORE
+// Stores new contacts
   $('.store-btn').on('click', function(event) {
     event.preventDefault();
 
@@ -43,7 +51,8 @@ $(document).ready(function() {
     key.lastName = $('.last-name').val();
 
     let value = {};
-    value.age = $('.age').val();
+    value.phone = $('.phone-number').val();
+    value.email = $('.email').val();
 
     localStorage.setItem(JSON.stringify(key), JSON.stringify(value));
 
@@ -51,6 +60,107 @@ $(document).ready(function() {
     showAll();
   });
 
+//Click to bring up the new contacts form
+  $('.add-contact').on('click', function() {
+    $results.slideUp();
+    $('.add-contact').hide();
+    $('.store-btn').show();
+    $('.done').hide();
+    $('.back').hide();
+    $('.edit').hide();
+    $('.cancel-btn').show();
+    $('.crud-form').show();
+  });
+
+// Cancel addition of contact. return to contact list
+  $('.cancel-btn').on('click', function() {
+    $('.add-contact').show();
+    $('.back').hide();
+    $('.done').hide();
+    $('.edit').hide();
+    $('.store-btn').hide();
+    $('.cancel-btn').hide();
+    $('.crud-form').hide();
+    $results.html('');
+    showAll();
+  });
+
+  $('.back').on('click', function() {
+    $('.add-contact').show();
+    $('.back').hide();
+    $('.done').hide();
+    $('.edit').hide();
+    $('.store-btn').hide();
+    $('.cancel-btn').hide();
+    $('.crud-form').hide();
+    $results.html('');
+    showAll();
+  });
+
+// When a contact is clicked on. Maybe move into $document.on('click', '.temp') or displayResults()
+  const selectedContact = function(key) {
+    let name = JSON.parse(key);
+    let info = JSON.parse(localStorage.getItem(key));
+    let $match = $('<div><div class="temp"><div class="firstname"></div><div class="lastname"></div><div class="phone"></div><div class="email"></div><div class="key"></div></div></div>');
+    $match.find('.firstname').text(name.firstName);
+    $match.find('.lastname').text(name.lastName);
+    $match.find('.phone').text(info.phone);
+    $match.find('.email').text(info.email);
+    $match.find('.key').text(key);
+    $match.appendTo($results);
+  };
+
+// Working on removing the outdated contact and replacing with new contact
+  $('.edit').on('click', function() {
+
+    //localStorage.removeItem(localStorage.getItem(key));
+    showAll();
+  });
+
+  const editContact = function(key) {
+    $results.html('');
+    let name = JSON.parse(key);
+    let info = JSON.parse(localStorage.getItem(key));
+
+    // let $match = $('<form><input class="first-name" type="text"><input class="last-name" type="text">' +
+    //   '<input class="phone-number" type="text"><input class="email" type="text"></form>');
+    // // $match.find('.first-name').val(name.firstName);
+    // // $match.find('.last-name').val(name.lastName);
+    // // $match.find('.phone-number').val(info.phone);
+    // // $match.find('.email').val(info.email);
+    // // $match.appendTo($results);
+
+    $('.add-contact').hide();
+    $('.back').hide();
+    $('.done').show();
+    $('.edit').hide();
+    $('.store-btn').hide();
+    $('.cancel-btn').show();
+    $('.crud-form').show();
+    $('.crud-form').find('.first-name').val(name.firstName);
+    $('.crud-form').find('.last-name').val(name.lastName);
+    $('.crud-form').find('.phone-number').val(info.phone);
+    $('.crud-form').find('.email').val(info.email);
+
+  };
+
+// When a contact is clicked, causes selectedContact() to run
+  $(document).on('click', '.temp', function() {
+    $results.html('');
+    let key = $(this).closest('.temp').find('.info').text();
+    selectedContact(key, true);
+    $('.add-contact').hide();
+    $('.back').show();
+    $('.edit').show();
+  });
+
+  $(document).on('click', '.edit', function() {
+    let key = $("div:last").closest('.temp').find('.key').text();
+    editContact(key);
+  });
+//Initial population of $results
+  showAll();
+});
 
 //RETRIEVE
   // $('.get-btn').on('click', function(event) {
@@ -122,32 +232,3 @@ $(document).ready(function() {
   //
   //   clearForm();
   // });
-
-//Click to bring up the new contacts form
-  $('.add-contact').on('click', function() {
-    $results.slideUp();
-    $('.add-contact').hide();
-    $('.store-btn').show();
-    $('.cancel-btn').show();
-    $('.crud-form').show().slideDown();
-  });
-
-// Cancel addition of contact. return to contact list
-  $('.cancel-btn').on('click', function() {
-    $results.slideDown();
-    $('.add-contact').show();
-    $('.store-btn').hide();
-    $('.cancel-btn').hide();
-    $('.crud-form').hide();
-  });
-
-// Display clicked contact info
-  $(document).on('click', '.temp', function() {
-    $results.html('');
-    let key = $(this).closest('.temp').find('.info').text();
-    displayResults(key);
-  });
-
-//Initial population of $results
-  showAll();
-});
