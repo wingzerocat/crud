@@ -1,0 +1,38 @@
+body {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  width: 700px;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add-contact {
+  color: blue;
+  border: 0px;
+  font-size: 25px;
+  visibility: visible;
+}
+
+h1 {
+  margin: 0px;
+}
+
+.temp {
+  border-bottom: 1px grey solid;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.temp:hover {
+  background-color: #e6eaf2;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: 0;
+}
