@@ -22,7 +22,7 @@ $(document).ready(function() {
   const homeBtns = function() {
     $results.html('');
     $('.add-contact').show();
-    $('.empty-btn').show();
+    $('.left-empty-btn').show();
     $('.cancel-btn').hide();
     $('.back').hide();
     $('.done').hide();
@@ -30,6 +30,8 @@ $(document).ready(function() {
     $('.store-btn').hide();
     $('.crud-form').hide();
     $('.contact-pic').hide();
+    $('.search-bar').show();
+    $('.right-empty-btn').hide();
     $('h1').show();
     $('h3').hide();
     $('.contact-pic').hide();
@@ -53,6 +55,7 @@ $(document).ready(function() {
     $('.last-name').val('');
     $('.phone-number').val('');
     $('.email').val('');
+    $('.search-term').val('');
   }
 
 // Stores new contacts
@@ -78,13 +81,15 @@ $(document).ready(function() {
     $results.html('');
     clearForm();
     $('.add-contact').hide();
-    $('.empty-btn').hide();
+    $('.left-empty-btn').hide();
     $('.store-btn').show();
     $('.done').hide();
     $('.back').hide();
     $('.edit-btn').hide();
     $('.cancel-btn').show();
     $('.crud-form').show();
+    $('.search-bar').hide();
+    $('.right-empty-btn').hide();
     $('h1').hide();
     $('h3').show();
   });
@@ -92,11 +97,13 @@ $(document).ready(function() {
 // Cancel addition of contact. return to contact list
   $('.cancel-btn').on('click', function() {
     homeBtns();
+    clearForm();
     showAll();
   });
 
   $('.back').on('click', function() {
     homeBtns();
+    clearForm();
     showAll();
   });
 
@@ -138,12 +145,14 @@ $(document).ready(function() {
     let info = JSON.parse(localStorage.getItem(key));
 
     $('.add-contact').hide();
-    $('.empty-btn').hide();
+    $('.left-empty-btn').hide();
     $('.back').hide();
     $('.done').show();
     $('.edit-btn').hide();
     $('.store-btn').hide();
     $('.cancel-btn').show();
+    $('.search-bar').hide();
+    $('.right-empty-btn').hide();
     $('.crud-form').show();
     $('.crud-form').find('.first-name').val(name.firstName);
     $('.crud-form').find('.last-name').val(name.lastName);
@@ -158,9 +167,12 @@ $(document).ready(function() {
     let key = $(this).closest('.temp').find('.info').text();
     selectedContact(key, true);
     $('.add-contact').hide();
-    $('.empty-btn').hide();
+    $('.left-empty-btn').hide();
+    $('.search-bar').hide();
     $('.back').show();
     $('.edit-btn').show();
+    $('.cancel-btn').hide();
+    $('.right-empty-btn').hide();
     $('h1').hide();
     $('.contact-pic').show();
 
@@ -170,6 +182,33 @@ $(document).ready(function() {
     let key = $("div:last").closest('.selected').find('.key').text();
     editContact(key);
   });
+
+  $('.search-bar').on('click', function() {
+    $('.add-contact').hide();
+    $('.cancel-btn').show();
+    $('.left-empty-btn').hide();
+    $('.right-empty-btn').show();
+  });
+
+// Attempting a dynamic search with .keyup()
+  $('.search-term').on('keyup', function() {
+    let searchTerm = $(this).val().toLowerCase();
+    $results.html('');
+
+    for (let i = 0; i < localStorage.length; i++) {
+      let contactName = JSON.parse(localStorage.key(i));
+      let first = contactName.firstName.toLowerCase();
+      let last = contactName.lastName.toLowerCase();
+
+      if (first.startsWith(searchTerm) || last.startsWith(searchTerm)) {
+        displayResults(localStorage.key(i));
+      }
+    }
+  });
+
+
+
+
 
 //Initial population of $results
   showAll();
