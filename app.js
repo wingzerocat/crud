@@ -27,8 +27,7 @@ $(document).ready(function() {
 // "home screen" buttons - empty and +
   const homeBtns = function() {
     $results.html('');
-    $('.new-contact').show();
-    $('.left-empty-btn').show();
+    $('.right-empty-btn').hide();
     $('.cancel-btn').hide();
     $('.back-btn').hide();
     $('.done-btn').hide();
@@ -36,8 +35,9 @@ $(document).ready(function() {
     $('.store-btn').hide();
     $('.crud-form').hide();
     $('.contact-pic').hide();
+    $('.new-contact').show();
+    $('.left-empty-btn').show();
     $('.search-bar').show();
-    $('.right-empty-btn').hide();
     $('h1').show();
     $('h3').hide();
     $('.contact-pic').hide();
@@ -47,6 +47,15 @@ $(document).ready(function() {
   const selectedContact = function(key) {
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
+
+    if (info.phone.length !== 0) {
+      let phone = (info.phone).replace(/ /g, '').replace(/\(/g, '').replace(/\)/, '').replace(/-/g, '');
+
+      let formattedPhone = '(';
+      formattedPhone += phone.slice(0,3) + ') ' + phone.slice(3, 6) + '-' + phone.slice(6, 10);
+      info.phone = formattedPhone;
+    }
+
     let $match = $('<div><div class="selected"><div class="full-name"></div><div class="company"></div>' +
       '<div class="spacer"></div><div class="catp"></div><div class="cphone">' +
       '</div><div class="cate"></div><div class="cemail"></div><div class="key"></div></div></div>');
@@ -77,12 +86,13 @@ $(document).ready(function() {
     $('.new-contact').hide();
     $('.left-empty-btn').hide();
     $('.back-btn').hide();
-    $('.done-btn').show();
     $('.edit-btn').hide();
     $('.store-btn').hide();
-    $('.cancel-btn').show();
     $('.search-bar').hide();
     $('.right-empty-btn').hide();
+    $('.done-btn').show();
+    $('.cancel-btn').show();
+
     $('.crud-form').show();
     $('.crud-form').find('.first-name').val(name.firstName);
     $('.crud-form').find('.last-name').val(name.lastName);
@@ -110,6 +120,7 @@ $(document).ready(function() {
     $('.search-term').val('');
   };
 
+// Checks if one of first/last is used and if phone is 'valid'
   const validateName = function() {
     if ($('.first-name').val().length === 0 && $('.last-name').val().length === 0) {
       alert('Please enter a first or last name');
@@ -170,14 +181,14 @@ $(document).ready(function() {
     clearForm();
     $('.new-contact').hide();
     $('.left-empty-btn').hide();
-    $('.store-btn').show();
     $('.done-btn').hide();
     $('.back-btn-btn').hide();
     $('.edit-btn').hide();
-    $('.cancel-btn').show();
-    $('.crud-form').show();
     $('.search-bar').hide();
     $('.right-empty-btn').hide();
+    $('.store-btn').show();
+    $('.cancel-btn').show();
+    $('.crud-form').show();
     $('h1').hide();
     $('h3').show();
   });
@@ -201,10 +212,10 @@ $(document).ready(function() {
     $('.new-contact').hide();
     $('.left-empty-btn').hide();
     $('.search-bar').hide();
-    $('.back-btn').show();
-    $('.edit-btn').show();
     $('.cancel-btn').hide();
     $('.right-empty-btn').hide();
+    $('.back-btn').show();
+    $('.edit-btn').show();
     $('h1').hide();
     $('.contact-pic').show();
   });
@@ -221,7 +232,7 @@ $(document).ready(function() {
     $('.right-empty-btn').show();
   });
 
-// Attempting a dynamic search with .keyup()
+// Searches localStorage for any matches. Consider bolding any matching strings
   $('.search-term').on('keyup', function() {
     let searchTerm = $(this).val().toLowerCase();
     $results.html('');
@@ -237,7 +248,6 @@ $(document).ready(function() {
     }
   });
 
-//Initial population of $results
   showAll();
 });
 
