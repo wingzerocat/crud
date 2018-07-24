@@ -9,26 +9,25 @@
       crossorigin="anonymous"></script>
       <link rel="stylesheet" type="text/css" href="style.css">
       <script src="app.js"></script>
-    <!--
-    TODO
-    add link to css
-    -->
   </head>
 
   <body>
     <div class="header">
-      <button class="add-contact">+</div>
+      <button class="store-btn">Add Contact</button>
+      <button class="cancel-btn">cancel</button>
+      <button class="add-contact">+</button>
+      <button class="back">Contacts</button>
+      <button class="edit">Edit</button>
+      <button class="done">Done</button>
     </div>
     <div><h1>Contacts</h1></div>
-    <div>
-      <form name="crud-form">
-        <input class="first-name" placeholder="First name" type="text">
-        <input class="last-name" placeholder="Last name" type="text">
-        <!-- <input class="age" placeholder="Age" type="text"> -->
 
-        <button class="store-btn">store data</button>
-        <button class="get-btn">get data</button>
-        <button class="delete-btn">delete data</button>
+    <div>
+      <form class="crud-form">
+        <input class="first-name" placeholder="First name" type="text"><br>
+        <input class="last-name" placeholder="Last name" type="text"><br>
+        <input class="phone-number" placeholder="phone number"type="text"><br>
+        <input class="email" placeholder="email" type="text"><br>
       </form>
     </div>
 
