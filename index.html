@@ -13,21 +13,31 @@
 
   <body>
     <div class="header">
+      <button class="empty-btn"></button>
       <button class="store-btn">Add Contact</button>
       <button class="cancel-btn">cancel</button>
       <button class="add-contact">+</button>
-      <button class="back">Contacts</button>
-      <button class="edit">Edit</button>
+      <button class="back"> < Contacts</button>
+      <button class="edit-btn">Edit</button>
       <button class="done">Done</button>
     </div>
     <div><h1>Contacts</h1></div>
 
-    <div>
+    <div class="form">
       <form class="crud-form">
-        <input class="first-name" placeholder="First name" type="text"><br>
-        <input class="last-name" placeholder="Last name" type="text"><br>
-        <input class="phone-number" placeholder="phone number"type="text"><br>
-        <input class="email" placeholder="email" type="text"><br>
+        <div class="input-field">
+          First name: <input class="first-name" placeholder="First name" type="text"><br>
+        </div>
+        <div class="input-field">
+          Last name: <input class="last-name" placeholder="Last name" type="text"><br>
+        </div>
+        <div class="input-field">
+          phone number: <input class="phone-number" placeholder="phone number"type="text"><br>
+        </div>
+        <div class="input-field">
+          email: <input class="email" placeholder="email" type="text"><br>
+        </div>
+        <input class="contact-key" type="text">
       </form>
     </div>
 
