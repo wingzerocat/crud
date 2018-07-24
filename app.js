@@ -1,16 +1,13 @@
 $(document).ready(function() {
   let $results = $('.results');
 
-// Displays the search results. Can consider getting rid of the details param if other function is
-// not refractored
+
   const displayResults = function(key, index, part) {
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
     let $match = $('<div><div class="temp"></div></div>');
-    // let $match = $('<div><div class="temp"><div class="name"></div><div class="info"></div></div></div>');
     $match.appendTo($results);
 
-    // Check for first name. Adds some spaces if no first name is present
     if (name.firstName === '' && part !== 'last') {
       $('.temp:last').append("<div class='name last-only'>" + name.lastName + "</div>");
     } else if (part === undefined) {
@@ -38,6 +35,7 @@ $(document).ready(function() {
     $('.new-contact').show();
     $('.left-empty-btn').show();
     $('.search-bar').show();
+    $('.delete-btn').hide();
     $('h1').show();
     $('h3').hide();
     $('.contact-pic').hide();
@@ -95,6 +93,7 @@ $(document).ready(function() {
     $('.store-btn').hide();
     $('.done-btn').show();
     $('.cancel-btn').show();
+    $('.delete-btn').show();
 
     $('.crud-form').show();
     $('.crud-form').find('.first-name').val(name.firstName);
@@ -126,16 +125,12 @@ $(document).ready(function() {
   };
 
 // Checks if one of first/last is used and if phone is 'valid'
-  const validateName = function() {
+  const validateNameNumber = function() {
     if ($('.first-name').val().length === 0 && $('.last-name').val().length === 0) {
       alert('Please enter a first or last name');
       return false;
     }
 
-    return true;
-  };
-
-  const validatePhone = function() {
     let phone = $('.phone-number').val();
     phone = phone.toString().replace(/ /g, '').replace(/\(/g, '').replace(/\)/, '').replace(/-/g, '');
 
@@ -148,10 +143,9 @@ $(document).ready(function() {
   };
 
   const storeContact = function() {
-    let validName = validateName();
-    let validPhone = validatePhone();
+    let valid = validateNameNumber();
 
-    if (validName && validPhone) {
+    if (valid) {
       let key = {};
       key.firstName = $('.first-name').val();
       key.lastName = $('.last-name').val();
@@ -168,17 +162,10 @@ $(document).ready(function() {
     showAll();
   };
 
-// Stores new and updated contacts. Calls storeContact();
-  $('.store-btn').on('click', function(event) {
-    event.preventDefault();
-    storeContact();
-  });
-
   $('.done-btn').on('click', function() {
-    let validName = validateName();
-    let validPhone = validatePhone();
+    let valid = validateNameNumber();
 
-    if (validName && validPhone) {
+    if (valid) {
       let name = $("form").find('.contact-key').val();
       localStorage.removeItem(name);
       storeContact();
@@ -197,6 +184,12 @@ $(document).ready(function() {
     $('.crud-form').show();
     $('h1').hide();
     $('h3').show();
+  });
+
+// Stores new and updated contacts. Calls storeContact();
+  $('.store-btn').on('click', function(event) {
+    event.preventDefault();
+    storeContact();
   });
 
 // Return to home screen
@@ -222,7 +215,7 @@ $(document).ready(function() {
     $('.contact-pic').show();
   });
 
-  $(document).on('click', '.edit-btn', function() {
+  $('.edit-btn').on('click', function() {
     let key = $("div:last").closest('.selected').find('.key').text();
     editContact(key);
   });
@@ -230,6 +223,17 @@ $(document).ready(function() {
   $('.search-bar').on('click', function() {
     $('.cancel-btn').show();
     $('.left-empty-btn').hide();
+  });
+
+  $('.delete-btn').on('click', function() {
+    let result = window.confirm('Delete contact?');
+
+    if (result) {
+      let name = $("form").find('.contact-key').val();
+      localStorage.removeItem(name);
+    }
+
+    showAll();
   });
 
 // Searches localStorage for any matches. Consider bolding any matching strings
