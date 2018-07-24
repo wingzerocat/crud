@@ -29,7 +29,13 @@ $(document).ready(function() {
     $('.edit-btn').hide();
     $('.store-btn').hide();
     $('.crud-form').hide();
+    $('.contact-pic').hide();
+    $('h1').show();
+    $('h3').hide();
+    $('.contact-pic').hide();
   };
+
+// Maybe try for another grouping of buttons
 
 // Shows all contacts
   const showAll = function() {
@@ -69,7 +75,8 @@ $(document).ready(function() {
 
 //Click to bring up the new contacts form
   $('.add-contact').on('click', function() {
-    $results.slideUp();
+    $results.html('');
+    clearForm();
     $('.add-contact').hide();
     $('.empty-btn').hide();
     $('.store-btn').show();
@@ -78,6 +85,8 @@ $(document).ready(function() {
     $('.edit-btn').hide();
     $('.cancel-btn').show();
     $('.crud-form').show();
+    $('h1').hide();
+    $('h3').show();
   });
 
 // Cancel addition of contact. return to contact list
@@ -95,12 +104,12 @@ $(document).ready(function() {
   const selectedContact = function(key) {
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
-    let $match = $('<div><div class="selected"><div class="firstname"></div><div class="lastname"></div><div class="phone"></div><div class="email"></div><div class="key"></div></div></div>');
-    $match.find('.firstname').text(name.firstName);
-    $match.find('.lastname').text(name.lastName);
-    $match.find('.phone').text(info.phone);
-    $match.find('.email').text(info.email);
-    $match.find('.key').text(key);
+    let $match = $('<div><div class="selected"><div class="full-name"></div><div class="phone"></div><div class="email"></div><div class="key"></div></div></div>');
+    $('.contact-pic').text(name.firstName[0] + name.lastName[0]);
+    $match.find('.full-name').text(name.firstName + ' ' + name.lastName);
+    $match.find('.phone').text('phone: ' + info.phone);
+    $match.find('.email').text('email: ' + info.email);
+    $match.find('.key').text(key).hide();
     $match.appendTo($results);
   };
 
@@ -152,6 +161,9 @@ $(document).ready(function() {
     $('.empty-btn').hide();
     $('.back').show();
     $('.edit-btn').show();
+    $('h1').hide();
+    $('.contact-pic').show();
+
   });
 
   $(document).on('click', '.edit-btn', function() {
