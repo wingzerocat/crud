@@ -9,7 +9,7 @@ $(document).ready(function() {
     let $match = $('<div><div class="temp"><div class="name"></div><div class="last-only"></div><div class="info"></div></div></div>');
     if (name.firstName === '') {
       $match.find('.name').addClass('last-only');
-      $match.find('.name').text(name.lastName);      
+      $match.find('.name').text(name.lastName);
     } else {
       $match.find('.name').text(name.firstName + ' ' + name.lastName);
     }
@@ -29,8 +29,8 @@ $(document).ready(function() {
     $('.add-contact').show();
     $('.left-empty-btn').show();
     $('.cancel-btn').hide();
-    $('.back').hide();
-    $('.done').hide();
+    $('.back-btn').hide();
+    $('.done-btn').hide();
     $('.edit-btn').hide();
     $('.store-btn').hide();
     $('.crud-form').hide();
@@ -54,6 +54,14 @@ $(document).ready(function() {
   };
 
 
+  const validateName = function() {
+    if ($('.first-name').val().length === 0 && $('.last-name').val().length === 0) {
+      alert('Need first or last');
+
+      return false;
+    }
+  }
+
 // Clears form values
   const clearForm = function() {
     $('.first-name').val('');
@@ -66,16 +74,20 @@ $(document).ready(function() {
 // Stores new contacts
   $('.store-btn').on('click', function(event) {
     event.preventDefault();
+    let valid = validateName();
 
-    let key = {};
-    key.firstName = $('.first-name').val();
-    key.lastName = $('.last-name').val();
+    if (valid) {
+      let key = {};
+      key.firstName = $('.first-name').val();
+      key.lastName = $('.last-name').val();
 
-    let value = {};
-    value.phone = $('.phone-number').val();
-    value.email = $('.email').val();
+      let value = {};
+      value.phone = $('.phone-number').val();
+      value.email = $('.email').val();
+      value.company = $('.company').val();
 
-    localStorage.setItem(JSON.stringify(key), JSON.stringify(value));
+      localStorage.setItem(JSON.stringify(key), JSON.stringify(value));
+    }
 
     clearForm();
     showAll();
@@ -88,8 +100,8 @@ $(document).ready(function() {
     $('.add-contact').hide();
     $('.left-empty-btn').hide();
     $('.store-btn').show();
-    $('.done').hide();
-    $('.back').hide();
+    $('.done-btn').hide();
+    $('.back-btn-btn').hide();
     $('.edit-btn').hide();
     $('.cancel-btn').show();
     $('.crud-form').show();
@@ -106,7 +118,7 @@ $(document).ready(function() {
     showAll();
   });
 
-  $('.back').on('click', function() {
+  $('.back-btn').on('click', function() {
     homeBtns();
     clearForm();
     showAll();
@@ -116,7 +128,7 @@ $(document).ready(function() {
   const selectedContact = function(key) {
     let name = JSON.parse(key);
     let info = JSON.parse(localStorage.getItem(key));
-    let $match = $('<div><div class="selected"><div class="full-name"></div>' +
+    let $match = $('<div><div class="selected"><div class="full-name"></div><div class="company"></div>' +
       '<div class="spacer"></div><div class="catp"></div><div class="cphone">' +
       '</div><div class="cate"></div><div class="cemail"></div><div class="key"></div></div></div>');
 
@@ -129,6 +141,7 @@ $(document).ready(function() {
     }
 
     $match.find('.full-name').text(name.firstName + ' ' + name.lastName);
+    $match.find('.company').text(info.company);
     $match.find('.catp').text('phone:');
     $match.find('.cphone').text(info.phone);
     $match.find('.cate').text('email:');
@@ -138,7 +151,7 @@ $(document).ready(function() {
   };
 
 // Clicking Done removes the old contact and stores the new contact
-  $('.done').on('click', function() {
+  $('.done-btn').on('click', function() {
     let name = $("form").find('.contact-key').val();
     console.log(name);
     localStorage.removeItem(name);
@@ -150,6 +163,7 @@ $(document).ready(function() {
     let value = {};
     value.phone = $('.phone-number').val();
     value.email = $('.email').val();
+    value.company = $('.company').val();
 
     localStorage.setItem(JSON.stringify(key), JSON.stringify(value));
 
@@ -163,8 +177,8 @@ $(document).ready(function() {
 
     $('.add-contact').hide();
     $('.left-empty-btn').hide();
-    $('.back').hide();
-    $('.done').show();
+    $('.back-btn').hide();
+    $('.done-btn').show();
     $('.edit-btn').hide();
     $('.store-btn').hide();
     $('.cancel-btn').show();
@@ -173,6 +187,7 @@ $(document).ready(function() {
     $('.crud-form').show();
     $('.crud-form').find('.first-name').val(name.firstName);
     $('.crud-form').find('.last-name').val(name.lastName);
+    $('.crud-form').find('.company').val(info.company);
     $('.crud-form').find('.phone-number').val(info.phone);
     $('.crud-form').find('.email').val(info.email);
     $('.crud-form').find('.contact-key').val(key);
@@ -186,7 +201,7 @@ $(document).ready(function() {
     $('.add-contact').hide();
     $('.left-empty-btn').hide();
     $('.search-bar').hide();
-    $('.back').show();
+    $('.back-btn').show();
     $('.edit-btn').show();
     $('.cancel-btn').hide();
     $('.right-empty-btn').hide();
