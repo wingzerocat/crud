@@ -12,19 +12,11 @@ body {
   display: table-cell;
   width: 500px;
   background-color: transparent;
-  /* background: linear-gradient(to bottom right, lightblue, lightgreen) fixed; */
   background: linear-gradient(to bottom right, white, white 40%, grey) fixed;
 }
 
-.wrapper {
-  display: flex;
-  margin-top: 10px;
-  width: inherit;
-  flex-direction: column;
-  justify-content: center;
-}
-
 .header {
+  margin-top: 10px;
   display: flex;
   width: inherit;
   justify-content: space-between;
@@ -95,10 +87,10 @@ button:focus {
   align-items: center;
 }
 
-.form {
+/* .form {
   display:flex;
   justify-content: center;
-}
+} */
 
 .crud-form {
   display: flex;
@@ -147,7 +139,7 @@ h3 {
 input {
   border: 0px;
   font-size: 15px;
-  width: 300px;
+  width: 400px;
   background: transparent;
 }
 
@@ -165,7 +157,7 @@ input:focus {
 }
 
 .input-field {
-  width: 300px;
+  width: 400px;
   margin-top: 5px;
   color: blue;
   border-bottom: 1px grey solid;
@@ -178,12 +170,23 @@ input:focus {
 
 .catp, .cate {
   color: blue;
+  margin-top: 10px;
+  white-space: pre-line;
 }
 
 .cphone, .cemail {
+  min-height: 20px;
   border-bottom: 1px grey solid;
 }
 
 .name.last-only {
   left: 20px;
+}
+
+.name.bold {
+  font-weight: bold;
+}
+
+input::placeholder {
+  color: lightgrey;
 }
