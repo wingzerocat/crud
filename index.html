@@ -12,35 +12,44 @@
   </head>
 
   <body>
-    <div class="header">
-      <button class="empty-btn"></button>
-      <button class="store-btn">Add Contact</button>
-      <button class="cancel-btn">cancel</button>
-      <button class="add-contact">+</button>
-      <button class="back"> < Contacts</button>
-      <button class="edit-btn">Edit</button>
-      <button class="done">Done</button>
-    </div>
-    <div><h1>Contacts</h1></div>
+    <div class="wrapper">
+      <div class="header">
+        <button class="empty-btn"></button>
+        <button class="add-contact">+</button>
+        <button class="cancel-btn">cancel</button>
+        <button class="store-btn">Add Contact</button>
+        <button class="back"> < Contacts</button>
+        <button class="edit-btn">Edit</button>
+        <button class="done">Done</button>
+      </div>
 
-    <div class="form">
-      <form class="crud-form">
-        <div class="input-field">
-          First name: <input class="first-name" placeholder="First name" type="text"><br>
-        </div>
-        <div class="input-field">
-          Last name: <input class="last-name" placeholder="Last name" type="text"><br>
-        </div>
-        <div class="input-field">
-          phone number: <input class="phone-number" placeholder="phone number"type="text"><br>
-        </div>
-        <div class="input-field">
-          email: <input class="email" placeholder="email" type="text"><br>
-        </div>
-        <input class="contact-key" type="text">
-      </form>
-    </div>
+      <div class="body-title">
+        <h1>Contacts</h1>
+        <h3>New Contact</h3>
+        <div class="contact-pic"></div>
+      </div>
 
-    <div class="results"></div>
+      <!-- Look into what is important and what classes i can remove -->
+      <div class="form">
+        <form class="crud-form">
+          <div class="name-field">
+            <input class="first-name" placeholder="First name" type="text"><br>
+          </div>
+          <div class="name-field">
+            <input class="last-name" placeholder="Last name" type="text"><br>
+          </div>
+          <div class="spacer"></div>
+          <div class="input-field">
+            phone: <input class="phone-number" type="text"><br>
+          </div>
+          <div class="input-field">
+            email: <input class="email" type="text"><br>
+          </div>
+          <input class="contact-key" type="text">
+        </form>
+      </div>
+
+      <div class="results"></div>
+    </div>
   </body>
 </html>
