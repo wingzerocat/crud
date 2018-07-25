@@ -132,7 +132,7 @@ $(document).ready(function() {
       $('.phone-number').css('outline', 'none');
 
       let key = {};
-      key.sorting = $('.first-name').val().toUpperCase();
+      key.sorting = $('.first-name').val().toUpperCase() + ' ' + $('.last-name').val().toUpperCase();
       key.firstName = $('.first-name').val();
       key.lastName = $('.last-name').val();
 
